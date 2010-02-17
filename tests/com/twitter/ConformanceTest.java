@@ -27,6 +27,7 @@ public class ConformanceTest extends TestCase {
 
     assertNotNull("No extractor configured", extractor);
     assertNotNull("No autolinker configured", linker);
+    linker.setNoFollow(false);
   }
 
   public void testMentionsExtractor() throws Exception {
@@ -108,6 +109,16 @@ public class ConformanceTest extends TestCase {
       assertEquals((String)testCase.get(KEY_DESCRIPTION),
                    (String)testCase.get(KEY_EXPECTED_OUTPUT),
                    linker.autoLinkURLs((String)testCase.get(KEY_INPUT)));
+    }
+  }
+
+  public void testAllAutolinking() throws Exception {
+    File yamlFile = new File(conformanceDir, "autolink.yml");
+    List testCases = loadConformanceData(yamlFile, "all");
+    for (Map testCase : (List<Map>)testCases) {
+      assertEquals((String)testCase.get(KEY_DESCRIPTION),
+                   (String)testCase.get(KEY_EXPECTED_OUTPUT),
+                   linker.autoLink((String)testCase.get(KEY_INPUT)));
     }
   }
 

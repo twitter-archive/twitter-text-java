@@ -13,14 +13,14 @@ public class Regex {
   public static final String HASHTAG_CHARACTERS = "[a-z0-9_\\u00c0-\\u00d6\\u00d8-\\u00f6\\u00f8-\\u00ff]";
 
   /* URL related hash regex collection */
-  private static final String URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^)";
-  private static final String URL_VALID_DOMAIN = "[a-z0-9\\.-]+\\.[a-z]{2,}(?::[0-9]+)?";
-  private static final String URL_VALID_URL_PATH_CHARS = "[a-z0-9!\\*'\\(\\);:@&=\\+\\$/%#\\[\\]\\-_\\.,~]";
+  private static final String URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^|\\:)";
+  private static final String URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{Punct}])+\\.[a-z]{2,}(?::[0-9]+)?";
+  private static final String URL_VALID_URL_PATH_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]";
   // Valid end-of-path chracters (so /foo. does not gobble the period).
   //   1. Allow ) for Wikipedia URLs.
   //   2. Allow =&# for empty URL parameters and other URL-join artifacts
   private static final String URL_VALID_URL_PATH_ENDING_CHARS = "[a-z0-9\\)=#/]";
-  private static final String URL_VALID_URL_QUERY_CHARS = "[a-z0-9!\\*'\\(\\);:@&=\\+\\$/%#\\[\\]\\-_\\.,~]";
+  private static final String URL_VALID_URL_QUERY_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]";
   private static final String URL_VALID_URL_QUERY_ENDING_CHARS = "[a-z0-9_&=#]";
   private static final String VALID_URL_PATTERN_STRING = "(" +     //  $1 total match
     "(" + URL_VALID_PRECEEDING_CHARS + ")" +                       //  $2 Preceeding chracter
@@ -51,7 +51,7 @@ public class Regex {
   public static final int VALID_URL_GROUP_BEFORE = 2;
   public static final int VALID_URL_GROUP_URL = 3;
 
-  public static final Pattern EXTRACT_MENTIONS = Pattern.compile("(^|[^a-z0-9_])[@\uFF20]([a-z0-9_]{1,20})", Pattern.CASE_INSENSITIVE);
+  public static final Pattern EXTRACT_MENTIONS = Pattern.compile("(^|[^a-z0-9_])[@\uFF20]([a-z0-9_]{1,20})(?!@)", Pattern.CASE_INSENSITIVE);
   public static final int EXTRACT_MENTIONS_GROUP_BEFORE = 1;
   public static final int EXTRACT_MENTIONS_GROUP_USERNAME = 2;
 
