@@ -16,14 +16,17 @@ public class Regex {
   private static final String URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^|\\:)";
   private static final String URL_VALID_DOMAIN = "(?:[^\\p{Punct}\\s][\\.-](?=[^\\p{Punct}\\s])|[^\\p{Punct}\\s])+\\.[a-z]{2,}(?::[0-9]+)?";
 
+  private static final String URL_VALID_GENERAL_PATH_CHARS = "[a-z0-9!\\*';:=\\+\\$/%#\\[\\]\\-_,~]";
   /** Allow URL paths to contain balanced parens
    *  1. Used in Wikipedia URLs like /Primer_(film)
    *  2. Used in IIS sessions like /S(dfd346)/
   **/
-  private static final String URL_BALANCE_PARENS = "(?:\\([^\\)]+\\))";
+  private static final String URL_BALANCE_PARENS = "(?:\\(" + URL_VALID_GENERAL_PATH_CHARS + "+\\))";
   private static final String URL_VALID_URL_PATH_CHARS = "(?:" +
     URL_BALANCE_PARENS +
-    "|[\\.,]?[a-z0-9!\\*';:=\\+\\$/%#\\[\\]\\-_,~@]" +
+    "|@[^/]+/" +
+    "|[\\.,]" + URL_VALID_GENERAL_PATH_CHARS + "+" +
+    "|" + URL_VALID_GENERAL_PATH_CHARS + "+" +
   ")";
 
   /** Valid end-of-path chracters (so /foo. does not gobble the period).
@@ -52,7 +55,7 @@ public class Regex {
   public static final int AUTO_LINK_HASHTAGS_GROUP_HASH = 2;
   public static final int AUTO_LINK_HASHTAGS_GROUP_TAG = 3;
 
-  public static final Pattern AUTO_LINK_USERNAMES_OR_LISTS = Pattern.compile("([^a-z0-9_]|^)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9\\x80-\\xFF-]{0,79})?", Pattern.CASE_INSENSITIVE);
+  public static final Pattern AUTO_LINK_USERNAMES_OR_LISTS = Pattern.compile("([^a-z0-9_]|^)(" + AT_SIGNS + "+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-\\x80-\\xFF-]{0,24})?", Pattern.CASE_INSENSITIVE);
   public static final int AUTO_LINK_USERNAME_OR_LISTS_GROUP_BEFORE = 1;
   public static final int AUTO_LINK_USERNAME_OR_LISTS_GROUP_AT = 2;
   public static final int AUTO_LINK_USERNAME_OR_LISTS_GROUP_USERNAME = 3;
