@@ -62,6 +62,7 @@ public class Autolink {
     hashtagUrlBase = DEFAULT_HASHTAG_URL_BASE;
 
     extractor.setExtractURLWithoutProtocol(false);
+    extractor.setCountSupplementaryCharacterAsOne(false);
   }
 
   public String escapeBrackets(String text) {
@@ -85,6 +86,9 @@ public class Autolink {
   private String autoLinkEntities(String text, List<Entity> entities) {
     StringBuilder builder = new StringBuilder(text.length());
     int beginIndex = 0;
+
+    // adjust indices for Unicode supplementary characters
+    extractor.adjustIndices(text, entities, 1);
 
     for (Entity entity : entities) {
       builder.append(text.subSequence(beginIndex, entity.start));
@@ -330,5 +334,16 @@ public class Autolink {
    */
   public void setUsernameIncludeSymbol(boolean usernameIncludeSymbol) {
     this.usernameIncludeSymbol = usernameIncludeSymbol;
+  }
+
+  /**
+   * Specifies whether Unicode supplemental characters (which are represented
+   * as 2 characters in Java) were counted as single characters when entities
+   * were extracted.
+   *
+   * @param flag  true to count supplementary characters as single characters.
+   */
+  public void setCountSupplementaryCharacterAsOne(boolean flag) {
+    extractor.setCountSupplementaryCharacterAsOne(flag);
   }
 }

@@ -13,8 +13,8 @@ public class Extractor {
       URL, HASHTAG, MENTION
     }
 
-    protected final int start;
-    protected final int end;
+    protected int start;
+    protected int end;
     protected final String value;
     protected final String listSlug;
     protected final Type type;
@@ -87,6 +87,8 @@ public class Extractor {
   }
 
   protected boolean extractURLWithoutProtocol = true;
+
+  protected boolean countSupplementaryCharacterAsOne = true;
 
   /**
    * Create a new extractor.
@@ -190,6 +192,8 @@ public class Extractor {
         }
       }
     }
+
+    adjustIndices(text, extracted, -1);
     return extracted;
   }
 
@@ -274,6 +278,7 @@ public class Extractor {
       urls.add(new Entity(start, end, url, Entity.Type.URL));
     }
 
+    adjustIndices(text, urls, -1);
     return urls;
   }
 
@@ -328,7 +333,33 @@ public class Extractor {
         extracted.add(new Entity(matcher, Entity.Type.HASHTAG, Regex.VALID_HASHTAG_GROUP_TAG));
       }
     }
+
+    adjustIndices(text, extracted, -1);
     return extracted;
+  }
+
+  /*
+   * Shift Entity's indices by {@code diff} for every Unicode supplementary character
+   * which appears before the entity.
+   *
+   * @param text original text
+   * @param entities extracted entities
+   * @param the amount to shift the entity's indices.
+   */
+  protected void adjustIndices(String text, List<Entity> entities, int diff) {
+    if (!countSupplementaryCharacterAsOne) {
+      return;
+    }
+    for (int i = 0; i < text.length() - 1; i++) {
+      if (Character.isSupplementaryCodePoint(text.codePointAt(i))) {
+        for (Entity entity: entities) {
+          if (entity.start > i) {
+            entity.start += diff;
+            entity.end += diff;
+          }
+        }
+      }
+    }
   }
 
   public void setExtractURLWithoutProtocol(boolean extractURLWithoutProtocol) {
@@ -337,5 +368,19 @@ public class Extractor {
 
   public boolean isExtractURLWithoutProtocol() {
     return extractURLWithoutProtocol;
+  }
+
+  /**
+   * Specifies whether to count Unicode supplemental characters (which are represented
+   * as 2 characters in Java) as single characters when calculating indices.
+   *
+   * @param flag  true to count supplementary characters as single characters.
+   */
+  public void setCountSupplementaryCharacterAsOne(boolean flag) {
+    this.countSupplementaryCharacterAsOne = flag;
+  }
+
+  public boolean getCountSupplementaryCharacterAsOne() {
+    return countSupplementaryCharacterAsOne;
   }
 }

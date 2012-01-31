@@ -66,6 +66,13 @@ public class AutolinkTest extends TestCase {
     assertAutolink(expected, linker.autoLink(tweet));
   }
 
+  public void testSupplementaryCharacter() {
+    // 𐐀 = U+10400, a supplementary character.
+    String text = "𐐀 #hashtag 𐐀 @mention 𐐀 http://twitter.com";
+    String expected = "𐐀 <a href=\"http://twitter.com/#!/search?q=%23hashtag\" title=\"#hashtag\" class=\"tweet-url hashtag\" rel=\"nofollow\">#hashtag</a> 𐐀 @<a class=\"tweet-url username\" href=\"http://twitter.com/mention\" rel=\"nofollow\">mention</a> 𐐀 <a href=\"http://twitter.com\" rel=\"nofollow\">http://twitter.com</a>";
+    assertAutolink(expected, linker.autoLink(text));
+  }
+
   protected void assertAutolink(String expected, String linked) {
     assertEquals("Autolinked text should equal the input", expected, linked);
   }
