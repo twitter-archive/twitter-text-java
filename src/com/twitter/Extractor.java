@@ -88,8 +88,6 @@ public class Extractor {
 
   protected boolean extractURLWithoutProtocol = true;
 
-  protected boolean countSupplementaryCharacterAsOne = true;
-
   /**
    * Create a new extractor.
    */
@@ -193,7 +191,6 @@ public class Extractor {
       }
     }
 
-    adjustIndices(text, extracted, -1);
     return extracted;
   }
 
@@ -278,7 +275,6 @@ public class Extractor {
       urls.add(new Entity(start, end, url, Entity.Type.URL));
     }
 
-    adjustIndices(text, urls, -1);
     return urls;
   }
 
@@ -334,8 +330,31 @@ public class Extractor {
       }
     }
 
-    adjustIndices(text, extracted, -1);
     return extracted;
+  }
+
+  /*
+   * Modify Unicode-based indices of the entities to UTF-16 based indices.
+   *
+   * In UTF-16 based indices, Unicode supplementary characters are counted as two characters.
+   *
+   * @param text original text
+   * @param entities entities with Unicode based indices
+   */
+  public void modifyIndicesFromUnicodeToUTF16(String text, List<Entity> entities) {
+    shiftIndices(text, entities, +1);
+  }
+
+  /*
+   * Modify UTF-16-based indices of the entities to Unicode-based indices.
+   *
+   * In Unicode-based indices, Unicode supplementary characters are counted as single characters.
+   *
+   * @param text original text
+   * @param entities entities with UTF-16 based indices
+   */
+  public void modifyIndicesFromUTF16ToToUnicode(String text, List<Entity> entities) {
+    shiftIndices(text, entities, -1);
   }
 
   /*
@@ -346,10 +365,7 @@ public class Extractor {
    * @param entities extracted entities
    * @param the amount to shift the entity's indices.
    */
-  protected void adjustIndices(String text, List<Entity> entities, int diff) {
-    if (!countSupplementaryCharacterAsOne) {
-      return;
-    }
+  protected void shiftIndices(String text, List<Entity> entities, int diff) {
     for (int i = 0; i < text.length() - 1; i++) {
       if (Character.isSupplementaryCodePoint(text.codePointAt(i))) {
         for (Entity entity: entities) {
@@ -368,19 +384,5 @@ public class Extractor {
 
   public boolean isExtractURLWithoutProtocol() {
     return extractURLWithoutProtocol;
-  }
-
-  /**
-   * Specifies whether to count Unicode supplemental characters (which are represented
-   * as 2 characters in Java) as single characters when calculating indices.
-   *
-   * @param flag  true to count supplementary characters as single characters.
-   */
-  public void setCountSupplementaryCharacterAsOne(boolean flag) {
-    this.countSupplementaryCharacterAsOne = flag;
-  }
-
-  public boolean getCountSupplementaryCharacterAsOne() {
-    return countSupplementaryCharacterAsOne;
   }
 }

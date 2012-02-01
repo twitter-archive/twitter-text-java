@@ -72,25 +72,29 @@ public class ExtractorTest extends TestCase {
       // insert U+10400 before " @mention"
       String text = String.format("%c @mention %c @mention", 0x00010400, 0x00010400);
 
-      // count U+10400 as single character
-      extractor.setCountSupplementaryCharacterAsOne(true);
-      List<Extractor.Entity> extracted = extractor.extractMentionsOrListsWithIndices(text);
-      assertEquals(extracted.size(), 2);
-      assertEquals(extracted.get(0).value, "mention");
-      assertEquals(extracted.get(0).start, 2);
-      assertEquals(extracted.get(0).end, 10);
-      assertEquals(extracted.get(1).value, "mention");
-      assertEquals(extracted.get(1).start, 13);
-      assertEquals(extracted.get(1).end, 21);
-
       // count U+10400 as 2 characters (as in UTF-16)
-      extractor.setCountSupplementaryCharacterAsOne(false);
-      extracted = extractor.extractMentionsOrListsWithIndices(text);
+      List<Extractor.Entity> extracted = extractor.extractMentionsOrListsWithIndices(text);
       assertEquals(extracted.size(), 2);
       assertEquals(extracted.get(0).value, "mention");
       assertEquals(extracted.get(0).start, 3);
       assertEquals(extracted.get(0).end, 11);
       assertEquals(extracted.get(1).value, "mention");
+      assertEquals(extracted.get(1).start, 15);
+      assertEquals(extracted.get(1).end, 23);
+
+      // count U+10400 as single character
+      extractor.modifyIndicesFromUTF16ToToUnicode(text, extracted);
+      assertEquals(extracted.size(), 2);
+      assertEquals(extracted.get(0).start, 2);
+      assertEquals(extracted.get(0).end, 10);
+      assertEquals(extracted.get(1).start, 13);
+      assertEquals(extracted.get(1).end, 21);
+
+      // count U+10400 as 2 characters (as in UTF-16)
+      extractor.modifyIndicesFromUnicodeToUTF16(text, extracted);
+      assertEquals(extracted.size(), 2);
+      assertEquals(extracted.get(0).start, 3);
+      assertEquals(extracted.get(0).end, 11);
       assertEquals(extracted.get(1).start, 15);
       assertEquals(extracted.get(1).end, 23);
     }
@@ -135,25 +139,29 @@ public class ExtractorTest extends TestCase {
       // insert U+10400 before " #hashtag"
       String text = String.format("%c #hashtag %c #hashtag", 0x00010400, 0x00010400);
 
-      // count U+10400 as single character
-      extractor.setCountSupplementaryCharacterAsOne(true);
-      List<Extractor.Entity> extracted = extractor.extractHashtagsWithIndices(text);
-      assertEquals(extracted.size(), 2);
-      assertEquals(extracted.get(0).value, "hashtag");
-      assertEquals(extracted.get(0).start, 2);
-      assertEquals(extracted.get(0).end, 10);
-      assertEquals(extracted.get(1).value, "hashtag");
-      assertEquals(extracted.get(1).start, 13);
-      assertEquals(extracted.get(1).end, 21);
-
       // count U+10400 as 2 characters (as in UTF-16)
-      extractor.setCountSupplementaryCharacterAsOne(false);
-      extracted = extractor.extractHashtagsWithIndices(text);
+      List<Extractor.Entity> extracted = extractor.extractHashtagsWithIndices(text);
       assertEquals(extracted.size(), 2);
       assertEquals(extracted.get(0).value, "hashtag");
       assertEquals(extracted.get(0).start, 3);
       assertEquals(extracted.get(0).end, 11);
       assertEquals(extracted.get(1).value, "hashtag");
+      assertEquals(extracted.get(1).start, 15);
+      assertEquals(extracted.get(1).end, 23);
+
+      // count U+10400 as single character
+      extractor.modifyIndicesFromUTF16ToToUnicode(text, extracted);
+      assertEquals(extracted.size(), 2);
+      assertEquals(extracted.get(0).start, 2);
+      assertEquals(extracted.get(0).end, 10);
+      assertEquals(extracted.get(1).start, 13);
+      assertEquals(extracted.get(1).end, 21);
+
+      // count U+10400 as 2 characters (as in UTF-16)
+      extractor.modifyIndicesFromUnicodeToUTF16(text, extracted);
+      assertEquals(extracted.size(), 2);
+      assertEquals(extracted.get(0).start, 3);
+      assertEquals(extracted.get(0).end, 11);
       assertEquals(extracted.get(1).start, 15);
       assertEquals(extracted.get(1).end, 23);
     }
@@ -215,25 +223,29 @@ public class ExtractorTest extends TestCase {
      // insert U+10400 before " http://twitter.com"
      String text = String.format("%c http://twitter.com %c http://twitter.com", 0x00010400, 0x00010400);
 
-     // count U+10400 as single character
-     extractor.setCountSupplementaryCharacterAsOne(true);
-     List<Extractor.Entity> extracted = extractor.extractURLsWithIndices(text);
-     assertEquals(extracted.size(), 2);
-     assertEquals(extracted.get(0).value, "http://twitter.com");
-     assertEquals(extracted.get(0).start, 2);
-     assertEquals(extracted.get(0).end, 20);
-     assertEquals(extracted.get(1).value, "http://twitter.com");
-     assertEquals(extracted.get(1).start, 23);
-     assertEquals(extracted.get(1).end, 41);
-
      // count U+10400 as 2 characters (as in UTF-16)
-     extractor.setCountSupplementaryCharacterAsOne(false);
-     extracted = extractor.extractURLsWithIndices(text);
+     List<Extractor.Entity> extracted = extractor.extractURLsWithIndices(text);
      assertEquals(extracted.size(), 2);
      assertEquals(extracted.get(0).value, "http://twitter.com");
      assertEquals(extracted.get(0).start, 3);
      assertEquals(extracted.get(0).end, 21);
      assertEquals(extracted.get(1).value, "http://twitter.com");
+     assertEquals(extracted.get(1).start, 25);
+     assertEquals(extracted.get(1).end, 43);
+
+     // count U+10400 as single character
+     extractor.modifyIndicesFromUTF16ToToUnicode(text, extracted);
+     assertEquals(extracted.size(), 2);
+     assertEquals(extracted.get(0).start, 2);
+     assertEquals(extracted.get(0).end, 20);
+     assertEquals(extracted.get(1).start, 23);
+     assertEquals(extracted.get(1).end, 41);
+
+     // count U+10400 as 2 characters (as in UTF-16)
+     extractor.modifyIndicesFromUnicodeToUTF16(text, extracted);
+     assertEquals(extracted.size(), 2);
+     assertEquals(extracted.get(0).start, 3);
+     assertEquals(extracted.get(0).end, 21);
      assertEquals(extracted.get(1).start, 25);
      assertEquals(extracted.get(1).end, 43);
    }
