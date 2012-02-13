@@ -18,6 +18,9 @@ public class Extractor {
     protected final String listSlug;
     protected final Type type;
 
+    protected String displayURL = null;
+    protected String expandedURL = null;
+
     public Entity(int start, int end, String value, String listSlug, Type type) {
       this.start = start;
       this.end = end;
@@ -82,6 +85,22 @@ public class Extractor {
 
     public Type getType() {
       return type;
+    }
+
+    public String getDisplayURL() {
+      return displayURL;
+    }
+
+    public void setDisplayURL(String displayURL) {
+      this.displayURL = displayURL;
+    }
+
+    public String getExpandedURL() {
+      return expandedURL;
+    }
+
+    public void setExpandedURL(String expandedURL) {
+      this.expandedURL = expandedURL;
     }
   }
 
