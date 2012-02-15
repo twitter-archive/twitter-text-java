@@ -311,6 +311,12 @@ public class Extractor {
     int charIndex = text.length() - 1;
     int codePointIndex = text.codePointCount(0, text.length()) - 1;
 
+    // Sort entities by index
+    Collections.<Entity>sort(entities, new Comparator<Entity>() {
+      public int compare(Entity e1, Entity e2) {
+        return e1.start - e2.start;
+      }
+    });
     // Iterate entities in reverse order
     ListIterator<Entity> entityIt = entities.listIterator(entities.size());
     Entity entity = entityIt.previous();
