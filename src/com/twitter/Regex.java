@@ -175,4 +175,6 @@ public class Regex {
   public static final int VALID_CASHTAG_GROUP_BEFORE = 1;
   public static final int VALID_CASHTAG_GROUP_DOLLAR = 2;
   public static final int VALID_CASHTAG_GROUP_CASHTAG = 3;
+  
+  public static final Pattern PB_CAMPAIGN_ID = Pattern.compile("targeting_[0-9]+");
 }
