@@ -80,7 +80,8 @@ public class Regex {
                                                    "\\uff21-\\uff3a\\uff41-\\uff5a" +  // full width Alphabet
                                                    "\\uff66-\\uff9f" +                 // half width Katakana
                                                    "\\uffa1-\\uffdc";                  // half width Hangul (Korean)
-  private static final String HASHTAG_ALPHA_NUMERIC_CHARS = "0-9\\uff10-\\uff19_" + HASHTAG_ALPHA_CHARS;
+  private static final String SPECIAL_CHARS_INCLUDED = "\\u00b7\\u2022\\u30fb\\uff65";
+  private static final String HASHTAG_ALPHA_NUMERIC_CHARS = "0-9\\uff10-\\uff19_" + HASHTAG_ALPHA_CHARS + SPECIAL_CHARS_INCLUDED;
   private static final String HASHTAG_ALPHA = "[" + HASHTAG_ALPHA_CHARS +"]";
   private static final String HASHTAG_ALPHA_NUMERIC = "[" + HASHTAG_ALPHA_NUMERIC_CHARS +"]";
 
