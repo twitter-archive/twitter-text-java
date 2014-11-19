@@ -25,7 +25,7 @@ public class Regex {
 
   private static final Yaml yaml = new Yaml();
   private static final Map tlds = (Map)yaml.load(
-    ClassLoader.getSystemResourceAsStream("tld_lib.yml")
+    Regex.class.getClassLoader().getResourceAsStream("tld_lib.yml")
   );
   private static final List gTlds = (List)tlds.get("generic");
   private static final List cTlds = (List)tlds.get("country");
