@@ -1,4 +1,8 @@
-## twitter-text-java [![Build Status](https://secure.travis-ci.org/twitter/twitter-text-java.png?branch=master)](http://travis-ci.org/twitter/twitter-text-java) [![Coverage Status](https://coveralls.io/repos/twitter/twitter-text-java/badge.png?branch=master)](https://coveralls.io/r/twitter/twitter-text-java?branch=master)
+## Deprecation Notice!
+
+This repository has been merged into the [twitter-text mono-repo](https://github.com/twitter/twitter-text) to simplify development, testing, creating issues, and pull requests. This repo is now inactive; please continue all activity in the mono-repo and move existing issues there.
+
+## twitter-text-java
 
 Java port of the twitter-text handling libraries.
 
