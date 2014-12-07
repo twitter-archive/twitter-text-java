@@ -28,6 +28,9 @@ public class RegexTest extends TestCase {
     assertCaptureCount(3, Regex.VALID_HASHTAG, "#日本語ハッシュタグ");
     assertCaptureCount(3, Regex.VALID_HASHTAG, "＃日本語ハッシュタグ");
 
+    assertCaptureCount(3, Regex.VALID_HASHTAG, "#مرحبا شباب");//Arabic
+    
+    
     assertTrue(Regex.VALID_HASHTAG.matcher("これはOK #ハッシュタグ").find());
     assertTrue(Regex.VALID_HASHTAG.matcher("これもOK。#ハッシュタグ").find());
     assertFalse(Regex.VALID_HASHTAG.matcher("これはダメ#ハッシュタグ").find());

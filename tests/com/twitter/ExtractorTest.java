@@ -5,6 +5,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.BeforeClass;
+
 import com.twitter.Extractor.Entity.Type;
 
 import junit.framework.TestCase;
@@ -22,6 +24,11 @@ public class ExtractorTest extends TestCase {
 
   public void setUp() throws Exception {
     extractor = new Extractor();
+  }
+  
+  @BeforeClass
+  public void extractURLWithoutProtocol() {
+      extractor.setExtractURLWithoutProtocol(true);
   }
 
   public static class OffsetConversionTest extends ExtractorTest {
@@ -82,6 +89,12 @@ public class ExtractorTest extends TestCase {
       assertOffsetConversionOk("aa", "a");
 
       assertOffsetConversionOk("\ud83d\ude02a\ud83d\ude02a\ud83d\ude02", "a");
+    }
+    
+    public void testExtractURLWithoutProtocol() {
+        
+        assertEquals(true, extractor.isExtractURLWithoutProtocol());
+        
     }
 
     private void assertOffsetConversionOk(String testData, String patStr) {
